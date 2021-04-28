@@ -1,0 +1,396 @@
+/* For div that comes right after nces header container, add top and bottom margins */
+div.header_container + div {
+  margin-top: 70px;
+  padding-top: 0px;
+  margin-bottom: 0px;
+}
+
+/* IES_Core_0004.css sets font size to 10px. */
+div.nces div.container {
+  font-size: 15px;
+  line-height: 18px;
+}
+
+/* Add extra space before footer */
+div.footer_container.nces {
+  margin-top: 60px;
+}
+
+@media only screen and (max-width: 768px) {
+  div.header_container + div {
+    margin-top: 60px;
+    padding-top: 0px;
+    margin-bottom: 0px;
+  }
+}
+.iap-content .d-flex {
+  display: flex !important;
+}
+.iap-content .flex-column {
+  flex-direction: column !important;
+}
+.iap-content .flex-grow-1 {
+  flex-grow: 1 !important;
+}
+
+.iap-breadcrumb {
+  border: 1px solid #fff;
+  display: block;
+  margin-bottom: 20px;
+  margin-top: 15px;
+}
+.iap-breadcrumb ol {
+  padding: 0px 2px;
+  margin-bottom: 25px;
+  list-style: none;
+  background-color: #fff;
+  font-family: Arial;
+}
+.iap-breadcrumb ol > li {
+  display: flex;
+  flex-direction: row;
+  float: left;
+  align-items: center;
+  justify-content: center;
+  height: 35px;
+}
+.iap-breadcrumb ol > li + li:before {
+  padding: 0 6px 0 2px;
+  font-size: 15px;
+  border: 0px solid red;
+  position: relative;
+  top: 0px;
+  content: " ";
+  background-image: url(../images/bi-chevron-right.svg);
+  background-position: center;
+  background-repeat: no-repeat;
+  width: 23px;
+  height: 13px;
+  text-align: center;
+  font-weight: bold;
+  color: #576f7f;
+}
+.iap-breadcrumb ol > li > a:link,
+.iap-breadcrumb ol > li > a:visited,
+.iap-breadcrumb ol > li > a:hover,
+.iap-breadcrumb ol > li > span {
+  color: #003DA5 !important;
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 18px;
+  text-decoration: none;
+}
+.iap-breadcrumb ol > li > a:hover {
+  text-decoration: underline;
+}
+.iap-breadcrumb ol div.dropdown.open button .caret {
+  background-image: url(../images/bi-caret-down.svg);
+}
+.iap-breadcrumb ol div.dropdown button {
+  border: none;
+  padding: 5px 10px;
+  background: #DFE6EB;
+  font-family: Arial;
+  font-weight: 400;
+  font-size: 14px;
+  color: #303e48;
+}
+.iap-breadcrumb ol div.dropdown button .caret {
+  border-width: 0;
+  background-image: url(../images/bi-caret-down.svg);
+  background-position: center;
+  background-repeat: no-repeat;
+  width: 13px;
+  height: 13px;
+  color: #576f7f;
+}
+.iap-breadcrumb ol div.dropdown ul.dropdown-menu {
+  margin: 0 !important;
+  width: 100%;
+  min-width: 200px;
+  border: none !important;
+  padding: 0 !important;
+  box-shadow: none !important;
+}
+.iap-breadcrumb ol div.dropdown ul.dropdown-menu li {
+  background: #DFE6EB;
+  border-top: 1px solid #A2B1BA;
+  padding: 0;
+}
+.iap-breadcrumb ol div.dropdown ul.dropdown-menu li a {
+  padding: 10px;
+  white-space: break-spaces;
+  text-decoration: none;
+  color: #303e48;
+}
+.iap-breadcrumb ol div.dropdown ul.dropdown-menu li a:hover {
+  background: inherit !important;
+}
+
+.mt-8 {
+  margin-top: 2em !important;
+}
+
+.mt-4 {
+  margin-top: 1em !important;
+}
+
+.mt-3 {
+  margin-top: 0.75em !important;
+}
+
+.mb-4 {
+  margin-bottom: 1em !important;
+}
+
+.mb-3 {
+  margin-bottom: 0.75em !important;
+}
+
+.mb-2 {
+  margin-bottom: 0.5em !important;
+}
+
+.mb-1 {
+  margin-bottom: 0.25em !important;
+}
+
+.mb-0 {
+  margin-bottom: 0 !important;
+}
+
+.p-1 {
+  padding: 0.25em !important;
+}
+
+.p-2 {
+  padding: 0.5em !important;
+}
+
+.p-3 {
+  padding: 0.75em !important;
+}
+
+.p-4 {
+  padding: 1em !important;
+}
+
+.pb-0 {
+  padding-bottom: 0 !important;
+}
+
+.pb-1 {
+  padding-bottom: 0.25em !important;
+}
+
+.pb-2 {
+  padding-bottom: 0.5em !important;
+}
+
+.pb-3 {
+  padding-bottom: 0.75em !important;
+}
+
+.pb-4 {
+  padding-bottom: 1em !important;
+}
+
+.pl-1 {
+  padding-left: 0.25em !important;
+}
+
+.pl-2 {
+  padding-left: 0.5em !important;
+}
+
+.pl-3 {
+  padding-left: 0.75em !important;
+}
+
+.pl-4 {
+  padding-left: 1em !important;
+}
+
+.iap-content {
+  margin-left: 30px;
+  margin-right: 30px;
+  line-height: 22px;
+  font-size: 14px;
+  color: #000;
+  /* Overriding Bootstrap 3 panel */
+  /* End of overriding Bootstrap 3 panel */
+}
+.iap-content.monserat {
+  font-family: "Montserrat", sans-serif !important;
+}
+.iap-content.monserat p, .iap-content.monserat div {
+  font-family: "Montserrat", sans-serif !important;
+}
+.iap-content.monserat ul li {
+  font-family: "Montserrat", sans-serif !important;
+}
+.iap-content.monserat h1,
+.iap-content.monserat h2,
+.iap-content.monserat h3,
+.iap-content.monserat h4,
+.iap-content.monserat h5,
+.iap-content.monserat h6 {
+  font-family: "Montserrat", sans-serif !important;
+}
+.iap-content h1,
+.iap-content h2,
+.iap-content h3,
+.iap-content h4,
+.iap-content h5,
+.iap-content h6 {
+  font-family: Arial !important;
+}
+.iap-content h1 {
+  font-size: 32px;
+  font-weight: 700;
+  color: #071d49;
+  line-height: 40px;
+}
+.iap-content h2 {
+  /*font-size: 24px;*/
+  font-weight: 400;
+  color: #071d49;
+  /*line-height: 34px;*/
+}
+.iap-content h3 {
+  /*font-size: 20px;*/
+  font-weight: 400;
+  color: #071d49;
+  /*line-height: 30px;*/
+}
+.iap-content h4 {
+  /*font-size: 18px;*/
+  font-weight: 400;
+  color: #071d49;
+  /*line-height: 28px;*/
+}
+.iap-content a:link,
+.iap-content a:visited,
+.iap-content a:hover {
+  color: #003da5;
+  text-decoration: none;
+}
+.iap-content a:hover {
+  text-decoration: underline;
+}
+.iap-content p, .iap-content div {
+  font-family: Arial;
+  font-size: 14px;
+  font-weight: 400;
+  color: #000;
+  line-height: 22px;
+}
+.iap-content ul li {
+  line-height: 1.3em;
+  padding-bottom: 10px;
+  font-family: Arial;
+  font-weight: 400;
+  color: #000;
+  font-size: 14px;
+}
+.iap-content .d-block {
+  display: block !important;
+}
+.iap-content .bold {
+  font-weight: bold;
+}
+.iap-content .bold700 {
+  font-weight: 700;
+}
+.iap-content .underline {
+  text-decoration: underline;
+}
+.iap-content .footnotes {
+  margin-top: 3em;
+  border-top: 1px solid #ededed;
+  padding-top: 15px;
+}
+.iap-content .footnotes p {
+  font-size: 12px;
+  line-height: 17px;
+  margin-bottom: 4px;
+}
+.iap-content a.top-badge:link,
+.iap-content a.top-badge:visited,
+.iap-content a.top-badge:hover {
+  text-decoration: none;
+  color: #333 !important;
+  background-color: #e5e5e5;
+  border-radius: 5px;
+  padding: 3px 6px;
+  text-transform: lowercase;
+  font-size: 11px;
+}
+.iap-content .panel-group {
+  margin-bottom: 5px;
+}
+.iap-content .panel-group .panel-body, .iap-content .panel-group .panel-default {
+  border: none !important;
+}
+.iap-content .panel-group .panel-heading {
+  background: #DFE6EB !important;
+  padding: 13px !important;
+}
+.iap-content .panel-group .panel-heading .icon-plus {
+  background-image: url(/surveys/international/assets/images/bi-plus.svg);
+  background-repeat: no-repeat;
+  background-position: center;
+  margin-right: 10px;
+  padding: 0 10px;
+}
+.iap-content .panel-group .panel-heading .icon-minus {
+  background-image: url(/surveys/international/assets/images/bi-dash.svg);
+  background-repeat: no-repeat;
+  background-position: center;
+  margin-right: 10px;
+  padding: 0 10px;
+}
+.iap-content .panel-group .panel-title {
+  position: relative;
+  padding-left: 25px;
+}
+.iap-content .panel-group .panel-title a:link,
+.iap-content .panel-group .panel-title a:visited,
+.iap-content .panel-group .panel-title a:hover {
+  text-decoration: none;
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 24px;
+  color: #071d49;
+}
+.iap-content .panel-group .panel-title a span {
+  position: absolute;
+  top: 2px;
+  left: -2px;
+  width: 20px;
+  height: 20px;
+}
+
+.glyphicon-triangle-right, .glyphicon-triangle-left {
+  font-size: 12px !important;
+}
+
+.back-to-link {
+  font-size: 17px;
+  margin-top: 10px;
+  margin-bottom: 18px;
+  display: block;
+}
+
+table.table .indented {
+  padding-left: 2em !important;
+}
+
+@media only screen and (max-width: 768px) {
+  .iap-content {
+    margin-left: 0;
+    margin-right: 0;
+  }
+}
+
+/*# sourceMappingURL=iap-common.css.map */
