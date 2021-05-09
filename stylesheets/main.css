@@ -238,19 +238,20 @@ https://pudding.cool/process/introducing-scrollama/ */
 
 #scroll {
   position: relative;
+  /* background-color: #f3f3f3;
+  padding: 1rem; */
 }
 
 .scroll__graphic {
   position: -webkit-sticky;
   position: sticky;
 
-  top: 0;
-  right: 0rem;
-  bottom: auto;
-  width: 100%;
-  -webkit-transform: translate3d(0, 0, 0);
-  -moz-transform: translate3d(0, 0, 0);
-  transform: translate3d(0, 0, 0);
+  left: 0;
+    width: 100%;
+    margin: 0;
+    -webkit-transform: translate3d(0, 0, 0);
+    -moz-transform: translate3d(0, 0, 0);
+    transform: translate3d(0, 0, 0);
 
   background-color: #DDDDDD;
   border: 1px solid #000000;
@@ -258,11 +259,11 @@ https://pudding.cool/process/introducing-scrollama/ */
 
 .scroll__graphic .plotArea.is-active{
     position: fixed;
-    right: 1rem;
-    top: 50%;
-    -moz-transform: translateY(-50%);
-    -webkit-transform: translateY(-50%);
-    transform: translateY(-50%);
+
+    left: 0;
+    margin: 0 auto;
+    
+    
 
     opacity: 1;
     z-index: 1;
@@ -289,13 +290,17 @@ https://pudding.cool/process/introducing-scrollama/ */
 .scroll__text {
     position: relative;
     padding: 0 1rem;
-    width: 36%;
     max-width: 30rem;
+    margin: 0 auto; 
 }
 
 .step {
-    opacity: 0.2;
+    opacity: 0.7;
     padding: 1rem;
+
+    margin: 0 auto 80vh auto;
+    color: #fff;
+    background-color: rgba(0, 0, 0, 0.1);
 
     /* transform: translate(0, -500px);
     border: 1px solid red; */

@@ -20,14 +20,18 @@ var scroller = scrollama();
 function handleResize() {
 
 	// 1. update height of step elements for breathing room between steps
-	var stepHeight = Math.floor(window.innerHeight * 0.9);
+	var stepHeight = Math.floor(window.innerHeight * 0.55);
 	step.style('height', stepHeight + 'px');
 
-	// 2. update height of graphic element
-	var bodyWidth = d3.select('body').node().offsetWidth;
+	// // 2. update height of graphic element
+	// var bodyWidth = d3.select('body').node().offsetWidth;
+
+    var figureHeight = window.innerHeight;
+    var figureMarginTop = (window.innerHeight - figureHeight) / 2;
 
 	graphic
-		.style('height', window.innerHeight + 'px');
+		.style('height', figureHeight + 'px')
+        .style("top", figureMarginTop + "px");
 
 	// 3. update width of chart by subtracting from text width
 	var chartMargin = 10;
@@ -53,7 +57,7 @@ function handleResize() {
 
 function handleStepEnter(response) {
 	// response = { element, direction, index }
-   //console.log(step);
+   console.log(response);
     //console.log(step.attr('class'));
     //console.log(step.classed('is-active', false));
 
