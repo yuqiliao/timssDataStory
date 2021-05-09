@@ -32,24 +32,24 @@ function setupOffset(ref) {
   var offsetVal = ref.offsetVal;
   var stepClass = ref.stepClass;
 
-  var el = document.createElement('div');
+  var el = document.createElement("div");
   el.id = getOffsetId(id);
-  el.className = 'scrollama__debug-offset';
-  el.style.position = 'fixed';
-  el.style.left = '0';
-  el.style.width = '100%';
-  el.style.height = '0';
-  el.style.borderTop = '2px dashed black';
-  el.style.zIndex = '9999';
+  el.className = "scrollama__debug-offset";
+  el.style.position = "fixed";
+  el.style.left = "0";
+  el.style.width = "100%";
+  el.style.height = "0";
+  el.style.borderTop = "2px dashed black";
+  el.style.zIndex = "9999";
 
-  var text = document.createElement('p');
-  text.innerText = "\"." + stepClass + "\" trigger: " + offsetVal;
-  text.style.fontSize = '12px';
-  text.style.fontFamily = 'monospace';
-  text.style.color = 'black';
-  text.style.margin = '0';
-  text.style.padding = '6px';
-  el.appendChild(text);
+  var p = document.createElement("p");
+  p.innerHTML = "\"." + stepClass + "\" trigger: <span>" + offsetVal + "</span>";
+  p.style.fontSize = "12px";
+  p.style.fontFamily = "monospace";
+  p.style.color = "black";
+  p.style.margin = "0";
+  p.style.padding = "6px";
+  el.appendChild(p);
   document.body.appendChild(el);
 }
 
@@ -66,10 +66,14 @@ function setup(ref) {
 function update(ref) {
   var id = ref.id;
   var offsetMargin = ref.offsetMargin;
+  var offsetVal = ref.offsetVal;
+  var format = ref.format;
 
+  var post = format === "pixels" ? "px" : "";
   var idVal = getOffsetId(id);
   var el = document.getElementById(idVal);
   el.style.top = offsetMargin + "px";
+  el.querySelector("span").innerText = "" + offsetVal + post;
 }
 
 function notifyStep(ref) {
@@ -80,7 +84,7 @@ function notifyStep(ref) {
   var prefix = "scrollama__debug-step--" + id + "-" + index;
   var elA = document.getElementById((prefix + "_above"));
   var elB = document.getElementById((prefix + "_below"));
-  var display = state === 'enter' ? 'block' : 'none';
+  var display = state === "enter" ? "block" : "none";
 
   if (elA) { elA.style.display = display; }
   if (elB) { elB.style.display = display; }
@@ -88,17 +92,14 @@ function notifyStep(ref) {
 
 function scrollama() {
   var OBSERVER_NAMES = [
-    'stepAbove',
-    'stepBelow',
-    'stepProgress',
-    'viewportAbove',
-    'viewportBelow' ];
+    "stepAbove",
+    "stepBelow",
+    "stepProgress",
+    "viewportAbove",
+    "viewportBelow"
+  ];
 
-  var cb = {
-    stepEnter: function () {},
-    stepExit: function () {},
-    stepProgress: function () {},
-  };
+  var cb = {};
   var io = {};
 
   var id = null;
@@ -122,16 +123,30 @@ function scrollama() {
   var preserveOrder = false;
   var triggerOnce = false;
 
-  var direction = 'down';
+  var direction = "down";
+  var format = "percent";
 
   var exclude = [];
 
   /* HELPERS */
+  function err(msg) {
+    console.error(("scrollama error: " + msg));
+  }
+
+  function reset() {
+    cb = {
+      stepEnter: function () {},
+      stepExit: function () {},
+      stepProgress: function () {}
+    };
+    io = {};
+  }
+
   function generateInstanceID() {
-    var a = 'abcdefghijklmnopqrstuv';
+    var a = "abcdefghijklmnopqrstuv";
     var l = a.length;
     var t = Date.now();
-    var r = [0, 0, 0].map(function (d) { return a[Math.floor(Math.random() * l)]; }).join('');
+    var r = [0, 0, 0].map(function (d) { return a[Math.floor(Math.random() * l)]; }).join("");
     return ("" + r + t);
   }
 
@@ -157,12 +172,12 @@ function scrollama() {
   }
 
   function getIndex(element) {
-    return +element.getAttribute('data-scrollama-index');
+    return +element.getAttribute("data-scrollama-index");
   }
 
   function updateDirection() {
-    if (window.pageYOffset > previousYOffset) { direction = 'down'; }
-    else if (window.pageYOffset < previousYOffset) { direction = 'up'; }
+    if (window.pageYOffset > previousYOffset) { direction = "down"; }
+    else if (window.pageYOffset < previousYOffset) { direction = "up"; }
     previousYOffset = window.pageYOffset;
   }
 
@@ -174,7 +189,8 @@ function scrollama() {
     viewH = window.innerHeight;
     pageH = getPageHeight();
 
-    offsetMargin = offsetVal * viewH;
+    var mult = format === "pixels" ? 1 : viewH;
+    offsetMargin = offsetVal * mult;
 
     if (isReady) {
       stepOffsetHeight = stepEl.map(function (el) { return el.getBoundingClientRect().height; });
@@ -182,7 +198,7 @@ function scrollama() {
       if (isEnabled) { updateIO(); }
     }
 
-    if (isDebug) { update({ id: id, stepOffsetHeight: stepOffsetHeight, offsetMargin: offsetMargin, offsetVal: offsetVal }); }
+    if (isDebug) { update({ id: id, offsetMargin: offsetMargin, offsetVal: offsetVal, format: format }); }
   }
 
   function handleEnable(enable) {
@@ -193,9 +209,7 @@ function scrollama() {
         updateIO();
       } else {
         // can't enable an unready scroller
-        console.error(
-          'scrollama error: enable() called before scroller was ready'
-        );
+        err("scrollama error: enable() called before scroller was ready");
         isEnabled = false;
         return; // all is not well, don't set the requested state
       }
@@ -223,32 +237,32 @@ function scrollama() {
     if (progress !== undefined) { stepStates[index].progress = progress; }
     var resp = { element: element, index: index, progress: stepStates[index].progress };
 
-    if (stepStates[index].state === 'enter') { cb.stepProgress(resp); }
+    if (stepStates[index].state === "enter") { cb.stepProgress(resp); }
   }
 
   function notifyOthers(index, location) {
-    if (location === 'above') {
+    if (location === "above") {
       // check if steps above/below were skipped and should be notified first
       for (var i = 0; i < index; i += 1) {
         var ss = stepStates[i];
-        if (ss.state !== 'enter' && ss.direction !== 'down') {
-          notifyStepEnter(stepEl[i], 'down', false);
-          notifyStepExit(stepEl[i], 'down');
-        } else if (ss.state === 'enter') { notifyStepExit(stepEl[i], 'down'); }
+        if (ss.state !== "enter" && ss.direction !== "down") {
+          notifyStepEnter(stepEl[i], "down", false);
+          notifyStepExit(stepEl[i], "down");
+        } else if (ss.state === "enter") { notifyStepExit(stepEl[i], "down"); }
         // else if (ss.direction === 'up') {
         //   notifyStepEnter(stepEl[i], 'down', false);
         //   notifyStepExit(stepEl[i], 'down');
         // }
       }
-    } else if (location === 'below') {
+    } else if (location === "below") {
       for (var i$1 = stepStates.length - 1; i$1 > index; i$1 -= 1) {
         var ss$1 = stepStates[i$1];
-        if (ss$1.state === 'enter') {
-          notifyStepExit(stepEl[i$1], 'up');
+        if (ss$1.state === "enter") {
+          notifyStepExit(stepEl[i$1], "up");
         }
-        if (ss$1.direction === 'down') {
-          notifyStepEnter(stepEl[i$1], 'up', false);
-          notifyStepExit(stepEl[i$1], 'up');
+        if (ss$1.direction === "down") {
+          notifyStepEnter(stepEl[i$1], "up", false);
+          notifyStepExit(stepEl[i$1], "up");
         }
       }
     }
@@ -262,14 +276,14 @@ function scrollama() {
 
     // store most recent trigger
     stepStates[index].direction = dir;
-    stepStates[index].state = 'enter';
-    if (preserveOrder && check && dir === 'down') { notifyOthers(index, 'above'); }
+    stepStates[index].state = "enter";
+    if (preserveOrder && check && dir === "down") { notifyOthers(index, "above"); }
 
-    if (preserveOrder && check && dir === 'up') { notifyOthers(index, 'below'); }
+    if (preserveOrder && check && dir === "up") { notifyOthers(index, "below"); }
 
     if (cb.stepEnter && !exclude[index]) {
       cb.stepEnter(resp, stepStates);
-      if (isDebug) { notifyStep({ id: id, index: index, state: 'enter' }); }
+      if (isDebug) { notifyStep({ id: id, index: index, state: "enter" }); }
       if (triggerOnce) { exclude[index] = true; }
     }
 
@@ -281,18 +295,18 @@ function scrollama() {
     var resp = { element: element, index: index, direction: dir };
 
     if (progressMode) {
-      if (dir === 'down' && stepStates[index].progress < 1)
+      if (dir === "down" && stepStates[index].progress < 1)
         { notifyStepProgress(element, 1); }
-      else if (dir === 'up' && stepStates[index].progress > 0)
+      else if (dir === "up" && stepStates[index].progress > 0)
         { notifyStepProgress(element, 0); }
     }
 
     // store most recent trigger
     stepStates[index].direction = dir;
-    stepStates[index].state = 'exit';
+    stepStates[index].state = "exit";
 
     cb.stepExit(resp, stepStates);
-    if (isDebug) { notifyStep({ id: id, index: index, state: 'exit' }); }
+    if (isDebug) { notifyStep({ id: id, index: index, state: "exit" }); }
   }
 
   /* OBSERVER - INTERSECT HANDLING */
@@ -320,8 +334,8 @@ function scrollama() {
       isIntersecting &&
       topAdjusted <= 0 &&
       bottomAdjusted >= 0 &&
-      direction === 'down' &&
-      ss.state !== 'enter'
+      direction === "down" &&
+      ss.state !== "enter"
     )
       { notifyStepEnter(target, direction); }
 
@@ -329,8 +343,8 @@ function scrollama() {
     if (
       !isIntersecting &&
       topAdjusted > 0 &&
-      direction === 'up' &&
-      ss.state === 'enter'
+      direction === "up" &&
+      ss.state === "enter"
     )
       { notifyStepExit(target, direction); }
   }
@@ -359,8 +373,8 @@ function scrollama() {
       isIntersecting &&
       topAdjusted <= 0 &&
       bottomAdjusted >= 0 &&
-      direction === 'up' &&
-      ss.state !== 'enter'
+      direction === "up" &&
+      ss.state !== "enter"
     )
       { notifyStepEnter(target, direction); }
 
@@ -368,8 +382,8 @@ function scrollama() {
     if (
       !isIntersecting &&
       bottomAdjusted < 0 &&
-      direction === 'down' &&
-      ss.state === 'enter'
+      direction === "down" &&
+      ss.state === "enter"
     )
       { notifyStepExit(target, direction); }
   }
@@ -390,12 +404,12 @@ function scrollama() {
 
     if (
       isIntersecting &&
-      direction === 'down' &&
-      ss.direction !== 'down' &&
-      ss.state !== 'enter'
+      direction === "down" &&
+      ss.direction !== "down" &&
+      ss.state !== "enter"
     ) {
-      notifyStepEnter(target, 'down');
-      notifyStepExit(target, 'down');
+      notifyStepEnter(target, "down");
+      notifyStepExit(target, "down");
     }
   }
 
@@ -409,12 +423,12 @@ function scrollama() {
     var ss = stepStates[index];
     if (
       isIntersecting &&
-      direction === 'up' &&
-      ss.direction === 'down' &&
-      ss.state !== 'enter'
+      direction === "up" &&
+      ss.direction === "down" &&
+      ss.state !== "enter"
     ) {
-      notifyStepEnter(target, 'up');
-      notifyStepExit(target, 'up');
+      notifyStepEnter(target, "up");
+      notifyStepExit(target, "up");
     }
   }
 
@@ -429,7 +443,7 @@ function scrollama() {
     var bottom = boundingClientRect.bottom;
     var bottomAdjusted = bottom - offsetMargin;
     if (isIntersecting && bottomAdjusted >= 0) {
-      notifyStepProgress(target, +intersectionRatio.toFixed(3));
+      notifyStepProgress(target, +intersectionRatio);
     }
   }
 
@@ -518,14 +532,14 @@ function scrollama() {
   /* SETUP FUNCTIONS */
 
   function indexSteps() {
-    stepEl.forEach(function (el, i) { return el.setAttribute('data-scrollama-index', i); });
+    stepEl.forEach(function (el, i) { return el.setAttribute("data-scrollama-index", i); });
   }
 
   function setupStates() {
     stepStates = stepEl.map(function () { return ({
       direction: null,
       state: null,
-      progress: 0,
+      progress: 0
     }); });
   }
 
@@ -536,7 +550,7 @@ function scrollama() {
   function isYScrollable(element) {
     var style = window.getComputedStyle(element);
     return (
-      (style.overflowY === 'scroll' || style.overflowY === 'auto') &&
+      (style.overflowY === "scroll" || style.overflowY === "auto") &&
       element.scrollHeight > element.clientHeight
     );
   }
@@ -559,6 +573,7 @@ function scrollama() {
 
   S.setup = function (ref) {
     var step = ref.step;
+    var parent = ref.parent;
     var offset = ref.offset; if ( offset === void 0 ) offset = 0.5;
     var progress = ref.progress; if ( progress === void 0 ) progress = false;
     var threshold = ref.threshold; if ( threshold === void 0 ) threshold = 4;
@@ -566,13 +581,14 @@ function scrollama() {
     var order = ref.order; if ( order === void 0 ) order = true;
     var once = ref.once; if ( once === void 0 ) once = false;
 
+    reset();
     // create id unique to this scrollama instance
     id = generateInstanceID();
 
-    stepEl = selectAll(step);
+    stepEl = selectAll(step, parent);
 
     if (!stepEl.length) {
-      console.error('scrollama error: no step elements');
+      err("no step elements");
       return S;
     }
 
@@ -585,7 +601,7 @@ function scrollama() {
     );
     if (scrollableParent) {
       console.error(
-        'scrollama error: step elements cannot be children of a scrollable element. Remove any css on the parent element with overflow: scroll; or overflow: auto; on elements with fixed height.',
+        "scrollama error: step elements cannot be children of a scrollable element. Remove any css on the parent element with overflow: scroll; or overflow: auto; on elements with fixed height.",
         scrollableParent
       );
     }
@@ -627,50 +643,48 @@ function scrollama() {
 
   S.destroy = function () {
     handleEnable(false);
-    Object.keys(cb).forEach(function (c) {
-      cb[c] = null;
-    });
-    Object.keys(io).forEach(function (i) {
-      io[i] = null;
-    });
+    reset();
   };
 
   S.offsetTrigger = function (x) {
-    if (x && !isNaN(x)) {
-      if (x > 1)
-        { console.error(
-          'scrollama error: offset value is greater than 1. Fallbacks to 1.'
-        ); }
-      if (x < 0)
-        { console.error(
-          'scrollama error: offset value is lower than 0. Fallbacks to 0.'
-        ); }
+    if (x === null) { return offsetVal; }
+
+    if (typeof x === "number") {
+      format = "percent";
+      if (x > 1) { err("offset value is greater than 1. Fallback to 1."); }
+      if (x < 0) { err("offset value is lower than 0. Fallback to 0."); }
       offsetVal = Math.min(Math.max(0, x), 1);
-      return S;
+    } else if (typeof x === "string" && x.indexOf("px") > 0) {
+      var v = +x.replace("px", "");
+      if (!isNaN(v)) {
+        format = "pixels";
+        offsetVal = v;
+      } else {
+        err("offset value must be in 'px' format. Fallback to 0.5.");
+        offsetVal = 0.5;
+      }
+    } else {
+      err("offset value does not include 'px'. Fallback to 0.5.");
+      offsetVal = 0.5;
     }
-    if (isNaN(x)) {
-      console.error(
-        'scrollama error: offset value is not a number. Fallbacks to 0.'
-      );
-    }
-    return offsetVal;
+    return S;
   };
 
   S.onStepEnter = function (f) {
-    if (typeof f === 'function') { cb.stepEnter = f; }
-    else { console.error('scrollama error: onStepEnter requires a function'); }
+    if (typeof f === "function") { cb.stepEnter = f; }
+    else { err("onStepEnter requires a function"); }
     return S;
   };
 
   S.onStepExit = function (f) {
-    if (typeof f === 'function') { cb.stepExit = f; }
-    else { console.error('scrollama error: onStepExit requires a function'); }
+    if (typeof f === "function") { cb.stepExit = f; }
+    else { err("onStepExit requires a function"); }
     return S;
   };
 
   S.onStepProgress = function (f) {
-    if (typeof f === 'function') { cb.stepProgress = f; }
-    else { console.error('scrollama error: onStepProgress requires a function'); }
+    if (typeof f === "function") { cb.stepProgress = f; }
+    else { err("onStepProgress requires a function"); }
     return S;
   };
 
