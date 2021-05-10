@@ -11,10 +11,9 @@ function svg_init() {
     // dynamic dimension sizing code adapted from
     // https://github.com/d3/d3-selection/issues/128
     const bbox = d3.select("#chart").node().getBoundingClientRect()
-
     const width = bbox.width;
     const height = bbox.height;
-    const margin = {top: 50, left: 100, right: 50, bottom: 50};
+    const margin = {top: 30, left: 30, right: 30, bottom: 30};
 
     const plotWidth = width - margin.left - margin.right;
     const plotHeight = height - margin.bottom - margin.top;
@@ -29,8 +28,12 @@ function svg_init() {
     d3.select("#chart")
         .append("svg")
         .attr("class", "chartContainer")
-        .attr("width", width)
-        .attr("height", height);
+        .attr("width", plotWidth)
+        .attr("height", plotHeight)
+        .attr(
+            "transform",
+            "translate(" + margin.left + "," + margin.top + ")"
+          )
 
     /*******************
     ***** TOOLTIPS *****
@@ -54,15 +57,8 @@ function svg_init() {
 
     // x-axis
     svg.append("g")
-        .attr("class", "xAxis xAxis0")
-    svg.append("g")
-        .attr("class", "xAxis xAxis1")
-    svg.append("g")
-        .attr("class", "xAxis xAxis2")
-    svg.append("g")
-        .attr("class", "xAxis xAxis3")
-    svg.append("g")
-        .attr("class", "xAxis xAxis4")
+        .attr("class", "xAxis")
+    
 
     // y-axis
     svg.append("g")
@@ -83,6 +79,20 @@ function svg_init() {
     svg.append("g")
         .attr("class", "yGrid")
 
+
+    svg.append("rect")
+        .attr("class", "rectScaleBreak1")
+    svg.append("rect")
+        .attr("class", "rectScaleBreak2")
+    
+    svg.append("line")
+        .attr("class", "lineScaleBreak11")
+    svg.append("line")
+        .attr("class", "lineScaleBreak12")
+    svg.append("line")
+        .attr("class", "lineScaleBreak21")
+    svg.append("line")
+        .attr("class", "lineScaleBreak22")
 
     /*****************************
     ***** APPEND AXIS LABELS *****
@@ -117,6 +127,8 @@ function svg_init() {
     // footer for source information and other notes
     svg.append("g")
         .attr("id", "footer");
+
+    
 
     /*************************
     ***** OTHER ELEMENTS *****

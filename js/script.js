@@ -33,11 +33,12 @@ function handleResize() {
 		.style('height', figureHeight + 'px')
         .style("top", figureMarginTop + "px");
 
-	// 3. update width of chart by subtracting from text width
-	var chartMargin = 10;
-	var textWidth = text.node().offsetWidth;
-	var chartWidth = graphic.node().offsetWidth - textWidth - chartMargin;
-    var chartHeight = Math.floor(chartWidth * 0.66)
+	// 3. update width of chart
+	var chartMargin = 200;
+	//var textWidth = text.node().offsetWidth;
+	var chartWidth = Math.floor(window.innerWidth * 0.9)
+    //var chartHeight = Math.floor(chartWidth * 0.66)
+    var chartHeight = Math.floor(window.innerHeight * 0.8)
 
 	chart
 		.style('width', chartWidth + 'px')
@@ -83,10 +84,10 @@ function handleStepEnter(response) {
     // update svgs
     switch(response.index) {
         case 0:
-            drawRangeChart(data_1, response);
+            drawUS1(data_1, response);
             break;
         case 1:
-            drawRangeChartA(data_1, response);
+            drawUS2(data_2, response);
             break;
         case 2:
             drawRangeChartB(data_1, response);
@@ -199,7 +200,7 @@ Promise.all([
     this.data_5 = results[4];
     this.data_6 = results[5];
 
-    //console.log(data_1)
+    console.log(results)
     //console.log(Array.from(new Set(data_1["IDCNTRY"])))
 
 
