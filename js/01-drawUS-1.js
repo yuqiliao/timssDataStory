@@ -10,15 +10,13 @@ function drawUS1(data, response) {
 
     const width = bbox.width;
     const height = bbox.height;
-    const margin = {top: 50, left: 150, right: 50, bottom: 50};
+    const margin = {top: 150, left: 150, right: 50, bottom: 150};
 
     const plotWidth = width - margin.left - margin.right;
     const plotHeight = height - margin.bottom - margin.top;
 
     const svg = d3.select("#chart")
                     .select("svg")
-                    // .attr("transform", "translate(" + margin.left + "," + margin.top + ")")
-
 
     const DURATION = 1000;
 
@@ -42,16 +40,11 @@ function drawUS1(data, response) {
     let yScale = d3.scaleBand()
         .domain(data.map(d => d[yGroup]))
         .range([margin.top, plotHeight])
-        .padding(.5);
-
-
+        .padding(1);
     
-    
-    /***************************************
-    ***** X AXIS, AXIS LABEL, GRIDLINE *****
-    ***************************************/
-
-    
+    /**********************************************
+    ***** X & Y AXIS, Axis breaks, AXIS LABEL *****
+    ***********************************************/
 
     let tickLength = 5
     let breaks = [350, 400, 450, 500, 550, 600, 650, 700]
@@ -86,19 +79,19 @@ function drawUS1(data, response) {
         .style("text-anchor", "middle")
         .style("font", "16px Arial")
 
+    let leftAdjust = margin.left + (xScale(400) - xScale(350))
+
     svg.selectAll(".yAxis")
-        .attr("transform", "translate(" + margin.left+ ",0)")
+        .attr("transform", "translate(" + leftAdjust + ",0)")
         .call(yAxis)
         //remove the y axis path (https://github.com/d3/d3-axis/issues/48)
-        //.call(d => d.select(".domain").remove())
+        .call(d => d.select(".domain").remove())
         .selectAll("text")
         .style("text-anchor", "end")
         .style("alignment-baseline", "middle")
         .style("font-weight", "bold")
-        .style("font", "12px Arial")
+        .style("font", "20px Arial")
         .style("fill", "black")
-
-    
 
     let rectSize = 15
     let break1 = 375
@@ -160,6 +153,10 @@ function drawUS1(data, response) {
         .attr("stroke-width", "1px")
         .style("opacity", 1)
 
+    /*******************************************
+    ***** gap line, circles, circle labels *****
+    ********************************************/
+
     //drawScoreGapLines
     let varScoreYear1 = "Year1 average score"
     let varScoreYear2 = "Year2 average score"
@@ -185,23 +182,20 @@ function drawUS1(data, response) {
         return xScale(d[varScoreYear2])
         })
         .attr("y1", function(d) {
-        return yScale(d[group]) + barHeight / 2
+        return yScale(d[group])
         })
         .attr("y2", function(d) {
-        return yScale(d[group]) + barHeight / 2
+        return yScale(d[group])
         })
 
     join_line.exit().remove()
     
-    
     //draw circle
-
     let colorYear1 = "#071D49"
     let colorYear2 = "#FBB03B"
     let colorBorder = "#576F7F"
 
     let circleR = 25
-
 
     let vars = [varScoreYear1, varScoreYear2]
     let varsColors = [colorYear1, colorYear2]
@@ -223,7 +217,7 @@ function drawUS1(data, response) {
             return xScale(d[vars[i]])
         })
         .attr("cy", function(d) {
-            return yScale(d[group]) + barHeight / 2
+            return yScale(d[group])
         })
         .attr("r", circleR)
         .style("fill", function(d) {})
@@ -243,22 +237,17 @@ function drawUS1(data, response) {
     join_score
       .merge(newelements_score)
       .attr(
-        "class",
-        d =>
-          `year1Labels ${d[group]}-year1Labels`)
+        "class",`year1Labels`)
       .attr("x", function(d) {
-        if (d[varScoreYear1] < d[varScoreYear2]) {
-          return xScale(d[varScoreYear1]) - 39
-        } else {
-          return xScale(d[varScoreYear1]) + 10
-        }
+          return xScale(d[varScoreYear1])
       })
       .attr("y", function(d) {
         return yScale(d[group])
       })
-      .style("text-anchor", "start")
+      .style("text-anchor", "middle")
       .style("alignment-baseline", "middle")
-      .style("font", "12px Arial")
+      .style("font", "16px Arial")
+      .style("fill", "white")
       .text(function(d) {
         return Math.round(d[varScoreYear1])
       })
@@ -271,82 +260,64 @@ function drawUS1(data, response) {
     let newelements_score2 = join_score2.enter().append("text")
 
     join_score2
-      .merge(newelements_score2)
-      .attr(
-        "class",
-        d =>
-          `year2Labels ${d[group]}-year2Labels`)
-      .attr("x", function(d) {
-        if (d[varScoreYear1] > d[varScoreYear2]) {
-          return xScale(d[varScoreYear2]) - 35
-        } else {
-          return xScale(d[varScoreYear2]) + 10
-        }
-      })
-      .attr("y", function(d) {
-        return yScale(d[group])
-      })
-      .style("text-anchor", "start")
-      .style("alignment-baseline", "middle")
-      .style("font", "12px Arial")
-      .text(function(d) {
-        return Math.round(d[varScoreYear2])
-      })
+    .merge(newelements_score2)
+    .attr(
+      "class",`year1Labels`)
+    .attr("x", function(d) {
+        return xScale(d[varScoreYear2])
+    })
+    .attr("y", function(d) {
+      return yScale(d[group])
+    })
+    .style("text-anchor", "middle")
+    .style("alignment-baseline", "middle")
+    .style("font", "16px Arial")
+    .style("fill", "white")
+    .text(function(d) {
+      return Math.round(d[varScoreYear2])
+    })
 
     join_score2.exit().remove()
 
 
-    
-
-
-    /***************************************
-    ***** Y AXIS, AXIS LABEL, GRIDLINE *****
-    ***************************************/
-
-
-    // svg.select(".yGrid")
-    //     .attr("transform", `translate(${margin.left}, ${margin.top})`) //+ 1 * yScale.bandwidth()
-    //     .call(d3.axisLeft(yScale)
-    //         .tickSize(-(plotWidth))
-    //         .tickFormat("")
-    //     );
+  
 
     
     /*************************
     ***** TITLE, CAPTION *****
     *************************/
 
-    // Create header grouping
-    const header = svg.select("#header");
+    // // Create header grouping
+    // const header = svg.select("#header");
 
-    // chart title
-    header.selectAll(".chartTitle")
-        .data([{"label": "Low and high performers of the US 4th-grade students on the TIMSS mathematics scale"}])
-        .enter()
-        .append("text")
-        .text(function(d) {return d.label;})
-        .attr("x", margin.left)
-        .attr("y", margin.top * 0.5)
-        .attr("text-anchor", "start")
-        .attr("class", "chartTitle")
-        .style("font-family", "sans-serif")
-        .style("font-weight", "bold")
-        .style("font-size", plotWidth/45) //to make the font size responsive
+    // // chart title
+    // header.selectAll(".chartTitle")
+    //     .data([{"label": "Low and high performers of the US 4th-grade students on the TIMSS mathematics scale"}])
+    //     .enter()
+    //     .append("text")
+    //     .text(function(d) {return d.label;})
+    //     .attr("x", margin.left)
+    //     .attr("y", margin.top * 0.5)
+    //     .attr("text-anchor", "start")
+    //     .attr("class", "chartTitle")
+    //     .style("font-family", "sans-serif")
+    //     .style("font-weight", "bold")
+    //     .style("font-size", plotWidth/45) //to make the font size responsive
         //console.log(plotWidth);
 
-    // Create footer grouping
-    const footer = svg.select("#footer");
+    // // Create footer grouping
+    // const footer = svg.select("#footer");
 
-    // Caption with data source
-    footer.selectAll(".captionText")
-        .data([{"label": "Data source: ePIRLS 2016 data"}])
-        .enter()
-        .append("text")
-        .text(function(d) {return d.label;})
-        .attr("x", margin.left)
-        .attr("y", plotHeight + margin.bottom*0.5)
-        .attr("text-anchor", "start")
-        .attr("class", "captionText")
+    // // Caption with data source
+    // footer.selectAll(".captionText")
+    //     .data([{"label": "Data source: TIMSS data"}])
+    //     .enter()
+    //     .append("text")
+    //     .text(function(d) {return d.label;})
+    //     .attr("x", margin.left)
+    //     .attr("y", plotHeight + margin.bottom*0.5)
+    //     .attr("text-anchor", "start")
+    //     .attr("class", "captionText")
     
 
 

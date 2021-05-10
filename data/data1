@@ -9,5 +9,16 @@
                       "title":"Figure M4a. Average scores and changes in average scores of 4th-grade students on the TIMSS mathematics scale, by education system: 1995, 2015, and 2019",
                       "name2":"Singapore",
                       "sup":"1"
+                    },
+                    {
+                      "Education system":"",
+                      "Year1 average score":"",
+                      "Year1 average score symbol":"",
+                      "Year2 average score":"",
+                      "Difference":"",
+                      "Difference symbol":"",
+                      "title":"",
+                      "name2":"",
+                      "sup":""
                     }
 ]

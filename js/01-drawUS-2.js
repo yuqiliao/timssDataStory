@@ -10,7 +10,7 @@ function drawUS2(data, response) {
 
     const width = bbox.width;
     const height = bbox.height;
-    const margin = {top: 50, left: 150, right: 50, bottom: 50};
+    const margin = {top: 150, left: 150, right: 50, bottom: 150};
 
     const plotWidth = width - margin.left - margin.right;
     const plotHeight = height - margin.bottom - margin.top;
